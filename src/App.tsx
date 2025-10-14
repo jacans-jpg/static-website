@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import { useAppStore } from "./store";
+
 const jokes: string[] = [
   "¿Por qué el hacker cruzó la carretera? Para evitar el firewall. 🚧",
   "Me encanta la seguridad informática… desde el sofá de mi casa. 🛋️",
@@ -10,6 +13,9 @@ const jokes: string[] = [
 ];
 
 export default function App() {
+  const logedIn = localStorage.getItem('AUTH_TOKEN') ? true : false;
+  const logout = useAppStore(state => state.logout);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 text-slate-800">
       <header className="backdrop-blur-sm bg-white/60 border-b border-slate-200 sticky top-0 z-40">
@@ -28,12 +34,23 @@ export default function App() {
             <a className="text-slate-600 hover:text-slate-800 transition" href="#jokes">Chistes</a>
             <a className="text-slate-600 hover:text-slate-800 transition" href="#about">Sobre</a>
             <a className="text-slate-600 hover:text-slate-800 transition" href="#contact">Contacto</a>
-            <button
-              className="ml-2 inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-indigo-600 to-emerald-400 text-white px-4 py-2 text-sm font-medium shadow hover:scale-[1.02] transform transition"
-              aria-label="Empezar"
-            >
-              Inicio
-            </button>
+            {!logedIn ? (
+              <Link
+                to={'/login'}
+                className="ml-2 inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-indigo-600 to-emerald-400 text-white px-4 py-2 text-sm font-medium shadow hover:scale-[1.02] transform transition"
+                aria-label="Empezar"
+              >
+                Iniciar Sesión
+              </Link>
+            ) : (
+              <button
+                onClick={() => logout()}
+                className="ml-2 inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-indigo-600 to-emerald-400 text-white px-4 py-2 text-sm font-medium shadow hover:scale-[1.02] transform transition"
+                aria-label="Empezar"
+              >
+                Cerrar Sesión
+              </button>
+            )}
           </nav>
         </div>
       </header>
